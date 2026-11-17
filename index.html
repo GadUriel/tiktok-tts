@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok Live TTS - OBS Overlay</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Panel de Configuración y Control (Ocultable con tecla 'H' o ?obs=1) -->
+  <div id="control-panel" class="panel">
+    <div class="panel-header">
+      <h2>🎙️ TikTok Live TTS (Edge TTS + OBS)</h2>
+      <span class="badge" id="ws-status">Desconectado</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="tiktok-user">Usuario TikTok (@usuario):</label>
+        <input type="text" id="tiktok-user" placeholder="ej. streamer_famoso">
+      </div>
+      <div class="form-group">
+        <label for="euler-key">EulerStream API Key:</label>
+        <input type="password" id="euler-key" placeholder="Tu API Key de EulerStream">
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="worker-url">Cloudflare Worker URL:</label>
+        <input type="text" id="worker-url" placeholder="https://tu-worker.workers.dev">
+      </div>
+      <div class="form-group">
+        <label for="groq-key">Groq API Key (Opcional - Emociones IA):</label>
+        <input type="password" id="groq-key" placeholder="gsk_... (vacio = reglas rápidas/regex)">
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <button id="btn-toggle-connect" class="btn primary">Conectar a TikTok</button>
+      <button id="btn-skip-audio" class="btn warning">Saltar Audio Actual</button>
+      <button id="btn-clear-queue" class="btn danger">Limpiar Cola</button>
+      <button id="btn-test-tts" class="btn secondary">Probar TTS</button>
+      <button id="btn-hide-panel" class="btn secondary">Ocultar Panel (H)</button>
+    </div>
+
+    <div class="queue-section">
+      <h3>Cola de Reproducción (<span id="queue-count">0</span>)</h3>
+      <div id="now-playing" class="now-playing">Sin reproducción activa</div>
+      <ul id="queue-list" class="queue-list"></ul>
+    </div>
+
+    <div class="profiles-section">
+      <div class="profiles-header">
+        <h3>Perfiles de Voz y Comandos</h3>
+        <button id="btn-reset-profiles" class="btn small">Restaurar Perfiles</button>
+      </div>
+      <table id="profiles-table">
+        <thead>
+          <tr>
+            <th>Comando / Regla</th>
+            <th>Voz Edge</th>
+            <th>Pitch (Hz)</th>
+            <th>Rate (%)</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="profiles-tbody"></tbody>
+      </table>
+      <button id="btn-add-profile" class="btn small success">+ Añadir Perfil</button>
+    </div>
+  </div>
+
+  <!-- Overlay para OBS (Siempre visible cuando se reproduce audio) -->
+  <div id="obs-overlay" class="obs-overlay">
+    <div id="tts-popup" class="tts-popup hidden">
+      <div class="popup-avatar" id="popup-avatar">💬</div>
+      <div class="popup-content">
+        <div class="popup-user" id="popup-user">Usuario</div>
+        <div class="popup-msg" id="popup-msg">Mensaje aquí...</div>
+      </div>
+      <div class="popup-indicator">
+        <span class="wave"></span>
+        <span class="wave"></span>
+        <span class="wave"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
